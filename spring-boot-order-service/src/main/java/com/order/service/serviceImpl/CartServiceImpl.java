@@ -12,6 +12,8 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Optional;
 
@@ -73,6 +75,7 @@ public class CartServiceImpl implements CartService {
 
     @Override
     public boolean addProduct(int productId, int quantity, String userName) {
+        String nowDate = LocalDateTime.now().format(DateTimeFormatter.ISO_LOCAL_DATE_TIME).toString();
         try {
             User existingUser = findUsername(userName);
             if (existingUser == null) {
@@ -84,12 +87,14 @@ public class CartServiceImpl implements CartService {
                     if (existingProduct.isPresent()) {
                         Cart recordExistingProduct = existingProduct.get();
                         recordExistingProduct.setQuantity(recordExistingProduct.getQuantity() + quantity);
+                        recordExistingProduct.setUpdatedAt(nowDate);
                         return saveProduct(recordExistingProduct);
                     } else {
                         Cart newProduct = new Cart();
                         newProduct.setProductId(productId);
                         newProduct.setQuantity(quantity);
-                        newProduct.setLastUpdate("12/12/12");
+                        newProduct.setCreatedAt(nowDate);
+                        newProduct.setUpdatedAt(nowDate);
                         newProduct.setUser(existingUser);
                         return saveProduct(newProduct);
                     }

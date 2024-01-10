@@ -17,7 +17,8 @@ public class Cart {
     private int id;
     private int productId;
     private int quantity;
-    private String lastUpdate;
+    private String createdAt;
+    private String updatedAt;
     @ManyToOne
     @JoinColumn(name = "user_id")
     @JsonIgnoreProperties("carts")
@@ -25,17 +26,20 @@ public class Cart {
     public Cart() {
     }
 
-    public Cart(int productId, int quantity, String lastUpdate, User user) {
+    public Cart(int id, int productId, int quantity, String createdAt, String updatedAt, User user) {
+        this.id = id;
         this.productId = productId;
         this.quantity = quantity;
-        this.lastUpdate = lastUpdate;
+        this.createdAt = createdAt;
+        this.updatedAt = updatedAt;
         this.user = user;
     }
 
-    public Cart(int productId, int quantity, String lastUpdate) {
+    public Cart(int productId, int quantity, String createdAt, String updatedAt, User user) {
         this.productId = productId;
         this.quantity = quantity;
-        this.lastUpdate = lastUpdate;
+        this.createdAt = createdAt;
+        this.updatedAt = updatedAt;
+        this.user = user;
     }
-
 }
