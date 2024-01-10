@@ -1,0 +1,7 @@
+FROM openjdk:17-jdk-slim-buster
+WORKDIR /app
+COPY opentelemetry-javaagent.jar /app/opentelemetry-javaagent.jar
+COPY /spring-boot-product-service/target/spring-boot-product-service-0.0.1-SNAPSHOT.jar /app/spring-boot-product-service-0.0.1-SNAPSHOT.jar
+COPY /spring-boot-product-service/src/main/resources/application.properties /app/application.properties
+EXPOSE 8081
+ENTRYPOINT ["java", "-javaagent:/app/opentelemetry-javaagent.jar", "-jar", "/app/spring-boot-product-service-0.0.1-SNAPSHOT.jar"]
