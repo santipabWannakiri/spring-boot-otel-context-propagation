@@ -7,13 +7,8 @@ import java.util.List;
 
 public interface CartService {
 
-    public boolean validateProductStatusAndQuantity(int productId, int quantity);
 
-    public boolean saveProduct(Cart cart);
+     boolean addProduct(int productId ,int quantity , String userName);
 
-    public User findUsername(String userName);
-
-    public boolean addProduct(int productId ,int quantity , String userName);
-
-    public List<Cart> getAllCarts();
+     List<Cart> getAllCarts();
 }

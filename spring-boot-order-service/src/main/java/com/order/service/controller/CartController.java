@@ -1,5 +1,7 @@
 package com.order.service.controller;
 
+import com.order.service.constants.Constants;
+import com.order.service.model.json.AppResponse;
 import com.order.service.model.Cart;
 import com.order.service.model.json.CartRequest;
 import com.order.service.service.CartService;
@@ -30,9 +32,9 @@ public class CartController {
     @PostMapping("/cart")
     public ResponseEntity<?> addProductToCart(@RequestBody CartRequest request) {
         if (cartService.addProduct(request.getProductId(), request.getQuantity(), request.getUsername())) {
-            return ResponseEntity.status(HttpStatus.OK).body("Added product id : " + request.getProductId());
+            return new ResponseEntity<>(new AppResponse(Constants.SUCCESS_CODE, Constants.SUCCESS_MESSAGE_CODE, Constants.REGISTER_SUCCESS_MESSAGE), HttpStatus.OK);
         } else {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Unable to add product id : " + request.getProductId());
+            return new ResponseEntity<>(new AppResponse(Constants.INTERNAL_ERROR_CODE, Constants.INTERNAL_MESSAGE_CODE, Constants.UNABLE_TO_PROCESS_MESSAGE), HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 

@@ -1,5 +1,7 @@
 package com.order.service.serviceImpl;
 
+import com.order.service.constants.Constants;
+import com.order.service.exception.type.*;
 import com.order.service.model.Cart;
 import com.order.service.model.json.ProductInfo;
 import com.order.service.model.User;
@@ -10,6 +12,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
 
 import java.time.LocalDateTime;
@@ -39,73 +42,77 @@ public class CartServiceImpl implements CartService {
         this.userRepository = userRepository;
     }
 
-    @Override
-    public boolean validateProductStatusAndQuantity(int productId, int quantity) {
+
+    private boolean validateProductStatusAndQuantity(int productId, int quantity) {
         String actualEndpoint = endpoint + "/api/product/" + productId;
         try {
             Optional<ProductInfo> result = Optional.ofNullable(restTemplate.getForObject(actualEndpoint, ProductInfo.class));
-            if (result.isPresent() && result.get().getStatus().equals("CURRENT")) {
+            if (result.isPresent() && result.get().getStatus() != null && result.get().getStatus().equals("CURRENT")) {
                 if (result.get().getQuantity() > quantity) {
                     return true;
                 } else {
                     log.error("Quantity exceed!!");
-                    return false;
+                    throw new QuantityExceedException(Constants.QUANTITY_EXCEED_MESSAGE);
                 }
             } else {
                 log.error("Product id : " + productId + " status not active.");
-                return false;
+                throw new ProductStatusNotActiveException(Constants.PRODUCT_STATUS_NOT_ACTIVE_MESSAGE);
             }
-        } catch (Exception ex) {
-            log.error("Error while validating product: {}", ex.getMessage());
-            return false;
+        } catch (RestClientException ex) {
+            log.error("Error during REST call: " + ex.getMessage());
+            throw new UnableToConnectToEndpointException(Constants.UNABLE_CONNECT_TO_ENDPOINT_MESSAGE);
         }
     }
 
-    @Override
-    public boolean saveProduct(Cart cart) {
+
+    private boolean updateExistingProduct(Cart existingProduct, int quantity, String nowDate) {
+        existingProduct.setQuantity(existingProduct.getQuantity() + quantity);
+        existingProduct.setUpdatedAt(nowDate);
+        return saveProduct(existingProduct);
+    }
+
+
+    private boolean createNewProduct(User existingUser, int productId, int quantity, String nowDate) {
+        Cart newProduct = new Cart();
+        newProduct.setProductId(productId);
+        newProduct.setQuantity(quantity);
+        newProduct.setCreatedAt(nowDate);
+        newProduct.setUpdatedAt(nowDate);
+        newProduct.setUser(existingUser);
+        return saveProduct(newProduct);
+    }
+
+
+    private boolean saveProduct(Cart cart) {
         Optional<Cart> result = Optional.of(cartRepository.save(cart));
         return result.isPresent();
     }
 
-    @Override
-    public User findUsername(String userName) {
-        Optional<User> existingUser = userRepository.findByUsername(userName);
-        return existingUser.orElse(null);
+
+    private User findUserOrThrow(String userName) {
+        User existingUser = userRepository.findByUsername(userName);
+        if (existingUser == null) {
+            log.error("User not found!");
+            throw new UserNotFoundException(Constants.USER_NOT_FOUND_MESSAGE);
+        }
+        return existingUser;
     }
 
     @Override
     public boolean addProduct(int productId, int quantity, String userName) {
         String nowDate = LocalDateTime.now().format(DateTimeFormatter.ISO_LOCAL_DATE_TIME).toString();
         try {
-            User existingUser = findUsername(userName);
-            if (existingUser == null) {
-                log.error("User not found!");
-                return false;
+            User existingUser = findUserOrThrow(userName);
+            validateProductStatusAndQuantity(productId, quantity);
+            Optional<Cart> existingProduct = cartRepository.findByProductIdAndUserId(productId, existingUser.getId());
+            if (existingProduct.isPresent()) {
+                return updateExistingProduct(existingProduct.get(), quantity, nowDate);
             } else {
-                if (validateProductStatusAndQuantity(productId, quantity)) {
-                    Optional<Cart> existingProduct = cartRepository.findByProductIdAndUserId(productId, existingUser.getId());
-                    if (existingProduct.isPresent()) {
-                        Cart recordExistingProduct = existingProduct.get();
-                        recordExistingProduct.setQuantity(recordExistingProduct.getQuantity() + quantity);
-                        recordExistingProduct.setUpdatedAt(nowDate);
-                        return saveProduct(recordExistingProduct);
-                    } else {
-                        Cart newProduct = new Cart();
-                        newProduct.setProductId(productId);
-                        newProduct.setQuantity(quantity);
-                        newProduct.setCreatedAt(nowDate);
-                        newProduct.setUpdatedAt(nowDate);
-                        newProduct.setUser(existingUser);
-                        return saveProduct(newProduct);
-                    }
-                } else {
-                    log.error("Exceed product quantity or Product status not active.");
-                    return false;
-                }
+                return createNewProduct(existingUser, productId, quantity, nowDate);
             }
         } catch (Exception ex) {
-            log.error("Error while process to add user: {}", ex.getMessage());
-            return false;
+            log.error("Error while saving the product : " + productId);
+            throw new UnableToAddProductException(Constants.UNABLE_TO_SAVE_PRODUCT_MESSAGE);
         }
     }
 
