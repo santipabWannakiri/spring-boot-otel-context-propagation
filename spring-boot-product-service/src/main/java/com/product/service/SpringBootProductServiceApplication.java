@@ -11,7 +11,7 @@ import org.springframework.context.annotation.Bean;
 
 @SpringBootApplication
 public class SpringBootProductServiceApplication {
-    @Autowired
+
     private ProductService productService;
 
     public SpringBootProductServiceApplication(ProductService productService) {

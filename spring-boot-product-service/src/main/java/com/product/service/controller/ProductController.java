@@ -1,18 +1,21 @@
 package com.product.service.controller;
 
+import com.product.service.constants.Constants;
 import com.product.service.model.Product;
+import com.product.service.model.json.AppResponse;
+import com.product.service.model.json.QuantityRequest;
 import com.product.service.service.ProductService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.Optional;
 
 @RestController
 @RequestMapping("/api")
 public class ProductController {
-    @Autowired
+
     private ProductService productService;
 
     public ProductController(ProductService productService) {
@@ -21,56 +24,58 @@ public class ProductController {
 
     @GetMapping("/products")
     public ResponseEntity<?> getAllProducts() {
-        return ResponseEntity.status(HttpStatus.OK).body(productService.findAll());
+        Optional<List<Product>> result = Optional.ofNullable(productService.findAll());
+        if (result.isPresent()) {
+            return ResponseEntity.status(HttpStatus.OK).body(result.get());
+        } else {
+            return new ResponseEntity<>(Constants.INTERNAL_ERROR_RESPONSE_OBJECT, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
 
     @GetMapping("/product/{id}")
     public ResponseEntity<?> getProductById(@PathVariable("id") int id) {
-        Optional<Product> fProduct = productService.findById(id);
-        if (fProduct.isPresent()) {
-            return ResponseEntity.status(HttpStatus.OK).body(fProduct.get());
+        Optional<Product> result = Optional.ofNullable(productService.findById(id));
+        if (result.isPresent()) {
+            return ResponseEntity.status(HttpStatus.OK).body(result.get());
         } else {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Not found product id : " + id);
+            return new ResponseEntity<>(Constants.INTERNAL_ERROR_RESPONSE_OBJECT, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
     @PostMapping("/products")
     public ResponseEntity<?> createNewProduct(@RequestBody Product product) {
-        Product tProduct = productService.save(product);
-        if (tProduct.getId() > 0) {
-            return ResponseEntity.status(HttpStatus.OK).body(tProduct);
+        Optional<Product> result = Optional.ofNullable(productService.save(product));
+        if (result.isPresent()) {
+            return ResponseEntity.status(HttpStatus.OK).body(result.get());
         } else {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Unable to record the product");
+            return new ResponseEntity<>(Constants.INTERNAL_ERROR_RESPONSE_OBJECT, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
     @PutMapping("/product/{PID}")
-    public ResponseEntity<?> updateProduct(@PathVariable("PID") int id, @RequestBody Product uProduct) {
-        Optional<Product> queryResultProduct = productService.findById(id);
-        if (queryResultProduct.isPresent()) {
-            Product tempProduct = queryResultProduct.get();
-            tempProduct.setName(uProduct.getName());
-            tempProduct.setDescription(uProduct.getDescription());
-            tempProduct.setPrice(uProduct.getPrice());
-            tempProduct.setQuantity(uProduct.getQuantity());
-            Product result = productService.save(tempProduct);
-            if (result.getId() > 0) {
-                return ResponseEntity.status(HttpStatus.OK).body(result);
-            } else {
-                return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Update product id : " + id + "unsuccessful");
-            }
+    public ResponseEntity<?> updateProduct(@PathVariable("PID") int productId, @RequestBody Product uProduct) {
+        if (productService.updateProduct(productId, uProduct)) {
+            return new ResponseEntity<>(new AppResponse(Constants.UPDATE_SUCCESS_MESSAGE), HttpStatus.OK);
         } else {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Not found product id : " + id);
+            return new ResponseEntity<>(Constants.INTERNAL_ERROR_RESPONSE_OBJECT, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
     @DeleteMapping("/product/{PID}")
     public ResponseEntity<?> deleteProduct(@PathVariable("PID") int id) {
-        boolean isSuccess = productService.deleteById(id);
-        if (isSuccess) {
-            return ResponseEntity.status(HttpStatus.OK).body("The product ID : " + id + "was deleted.");
+        if (productService.deleteById(id)) {
+            return new ResponseEntity<>(new AppResponse(Constants.DELETE_SUCCESS_MESSAGE), HttpStatus.OK);
         } else {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Not found product id : " + id);
+            return new ResponseEntity<>(Constants.INTERNAL_ERROR_RESPONSE_OBJECT, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @PutMapping("/product/deduct/{PID}")
+    public ResponseEntity<?> deductQuantity(@PathVariable("PID") int productId, @RequestBody QuantityRequest quantity) {
+        if (productService.deductQuantity(productId, quantity.getRequestedQuantity())) {
+            return new ResponseEntity<>(new AppResponse(Constants.DEDUCT_SUCCESS_MESSAGE), HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>(Constants.INTERNAL_ERROR_RESPONSE_OBJECT, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
