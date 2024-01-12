@@ -16,10 +16,7 @@ import java.util.Arrays;
 
 @SpringBootApplication
 public class SpringBootOrderServiceApplication {
-    @Autowired
     private CartRepository cartRepository;
-
-    @Autowired
     private UserRepository userRepository;
 
     public SpringBootOrderServiceApplication(CartRepository cartRepository, UserRepository userRepository) {

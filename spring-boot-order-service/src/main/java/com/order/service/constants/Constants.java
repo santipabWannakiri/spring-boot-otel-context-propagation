@@ -1,10 +1,12 @@
 package com.order.service.constants;
 
+import com.order.service.model.json.AppResponse;
+
 public final class Constants {
     //====== SUCCESS ======
     public static final String SUCCESS_CODE = "0000";
     public static final String SUCCESS_MESSAGE_CODE = "SUCCESS";
-    public static final String REGISTER_SUCCESS_MESSAGE = "Registered successfully.";
+    public static final String ADD_SUCCESS_MESSAGE = "Added product to cart.";
 
     //====== INTERNAL_SERVER_ERROR ======
     public static final String INTERNAL_ERROR_CODE = "6601";
@@ -32,10 +34,14 @@ public final class Constants {
     public static final String UNABLE_CONNECT_TO_ENDPOINT_ERROR_CODE = "6601";
     public static final String UNABLE_CONNECT_TO_ENDPOINT_MESSAGE_CODE = "UNABLE_CONNECT_TO_ENDPOINT";
     public static final String UNABLE_CONNECT_TO_ENDPOINT_MESSAGE = "Unable to reach out to target endpoint";
+    public static final String UNABLE_TO_DEDUCT_QUANTITY_MESSAGE = "Unable to deduct product quantity";
 
     //====== UNABLE_TO_SAVE_PRODUCT_ERROR ======
     public static final String UNABLE_TO_SAVE_PRODUCT_ERROR_CODE = "6601";
     public static final String UNABLE_TO_SAVE_PRODUCT_MESSAGE_CODE = "UNABLE_TO_SAVE_PRODUCT";
     public static final String UNABLE_TO_SAVE_PRODUCT_MESSAGE = "There is the issue while saving product.";
+
+    //====== INTERNAL_ERROR_RESPONSE_OBJECT ======
+    public static final AppResponse INTERNAL_ERROR_RESPONSE_OBJECT = new AppResponse(Constants.INTERNAL_ERROR_CODE, Constants.INTERNAL_MESSAGE_CODE, Constants.UNABLE_TO_PROCESS_MESSAGE);
 
 }

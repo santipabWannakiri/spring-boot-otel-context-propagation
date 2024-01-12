@@ -20,7 +20,7 @@ public class GlobalExceptionHandler {
             response.setAppMessageCode(Constants.USER_NOT_FOUND_MESSAGE_CODE);
             response.setDescription(ex.getMessage());
             httpStatus = HttpStatus.NOT_FOUND;
-        }else if( ex instanceof QuantityExceedException){
+        } else if (ex instanceof QuantityExceedException) {
             response.setAppResponseCode(Constants.QUANTITY_EXCEED_ERROR_CODE);
             response.setAppMessageCode(Constants.QUANTITY_EXCEED_MESSAGE_CODE);
             response.setDescription(ex.getMessage());
@@ -44,6 +44,4 @@ public class GlobalExceptionHandler {
         return new ResponseEntity<>(response, httpStatus);
     }
 
-    public GlobalExceptionHandler() {
-    }
 }

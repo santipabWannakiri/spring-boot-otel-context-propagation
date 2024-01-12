@@ -1,5 +1,6 @@
 package com.order.service.model.json;
 
+import com.order.service.constants.Constants;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 
@@ -20,5 +21,9 @@ public class AppResponse {
         this.description = description;
     }
 
-
+    public AppResponse(String description) {
+        this.appResponseCode = Constants.SUCCESS_CODE;
+        this.appMessageCode = Constants.SUCCESS_MESSAGE_CODE;
+        this.description = description;
+    }
 }
