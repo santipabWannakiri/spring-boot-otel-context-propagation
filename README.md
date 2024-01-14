@@ -61,5 +61,15 @@ B-Session-ID: sessionB
 In the scenario of implementing 2 microservices, one from VendorA and the other from VendorB, attempting to establish context propagation between them becomes challenging.\
 This difficulty arises due to the notable differences in header field names and even data formats used by each service. Consequently, achieving seamless communication and context exchange between these microservices becomes impractical, highlighting the need for standardized practices to enhance interoperability.
 
-[W3C Trace Context](https://engineering.dynatrace.com/open-source/standards/w3c-trace-context/)\
+## W3C Trace Context and OpenTelemetry: Industry Standards for Enhanced Context Propagation
+To address these challenges and promote interoperability, the industry has embraced standards such as W3C Trace Context and OpenTelemetry. OpenTelemetry, a widely adopted observability framework, adheres to the W3C Trace Context standard, providing a common framework for context propagation. Given this alignment, it is recommended to leverage OpenTelemetry when tracing microservices. By doing so, organizations can benefit from a standardized approach, ensuring consistency and compatibility in distributed tracing practices across diverse microservices and components.
+
+Refer :\
+[W3C Recommendation](https://www.w3.org/TR/trace-context/)\
+[OpenTelemetry Context Propagation](https://opentelemetry.io/docs/concepts/context-propagation/#propagation)
+
+
+
+
+[Distributed tracing](https://engineering.dynatrace.com/open-source/standards/w3c-trace-context/)
 [What is OpenTelemetry? A Straightforward Guide](https://www.aspecto.io/blog/what-is-opentelemetry-the-infinitive-guide/)
