@@ -24,10 +24,15 @@ The presented illustration depicts a collaborative interaction between two servi
    - Cart service updates the cart based on the response.
    - Cart service notifies the user of success/failure.
 
-In the given scenario, envision a user-initiated transaction navigating through numerous services before yielding a result. Picture having 5 or 10 services involved; in the event of an error during the transaction, the investigation process could become highly challenging. This is where the pivotal concept of distributed tracing comes into play – it serves as the key to monitoring and visualizing request flows across diverse components within a distributed system.
+In the given scenario, envision a user-initiated transaction navigating through numerous services before yielding a result. Picture having 5 or 10 services involved; in the event of an error during the transaction, the investigation process could become highly challenging. This is where the pivotal concept of `distributed tracing` comes into play – it serves as the key to monitoring and visualizing request flows across diverse components within a distributed system.
 
 ## OpenTelemetry context propagation
+To make the distributed tracing work, we need a `Context propagation`.
 Context propagation, a crucial aspect of distributed tracing, ensures seamless tracking of contextual information throughout the entire journey of a transaction, facilitating effective monitoring and troubleshooting.
+
+So how does it work please take a look folw below.
+
+
 
 
 [W3C Trace Context](https://engineering.dynatrace.com/open-source/standards/w3c-trace-context/)\
