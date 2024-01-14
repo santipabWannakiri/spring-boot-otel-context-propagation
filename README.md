@@ -26,21 +26,40 @@ The presented illustration depicts a collaborative interaction between two servi
 
 In the given scenario, envision a user-initiated transaction navigating through numerous services before yielding a result. Picture having 5 or 10 services involved; in the event of an error during the transaction, the investigation process could become highly challenging. This is where the pivotal concept of `distributed tracing` comes into play – it serves as the key to monitoring and visualizing request flows across diverse components within a distributed system.
 
-## OpenTelemetry context propagation
-To make the distributed tracing work, we need a `Context propagation`.
-Context propagation, a crucial aspect of distributed tracing, ensures seamless tracking of contextual information throughout the entire journey of a transaction, facilitating effective monitoring and troubleshooting.
+## Context propagation
+For distributed tracing to function properly, we rely on something called `Context propagation`.\
+`Context propagation` is a key part of distributed tracing that ensures smooth tracking of information as a transaction moves through its entire journey. This helps a lot when we need to keep an eye on what's happening and fix any issues.
 
-So how does it work please take a look folw below.
+The fundamental principle of context propagation is straightforward: we must transmit context information from the initial service to each subsequent service until the entire flow is executed. This context may manifest as a transaction number or any unique identifier. 
 
+To enhance comprehension, refer to the visual representation below.
 <p align="center">
   <img src="images/basiac-context-propagation.png" alt="image description" width="800" height="300">
 </p>
 
+The picture above corresponds to a previous example of a service. You'll notice that we have added header fields as follows:
+- `transaction` identifier serves as a unique label that must be transmitted through every service involved in the workflow of a transaction.
+-  `parentid` establishes a hierarchical structure, indicating which span or operation is the parent of the current one.
 
 ## Interoperability challenges
 In the absence of a universally accepted standard for context propagation, integrating systems from different vendors can pose challenges. This lack of standardization may result in difficulties ensuring seamless context propagation, potentially leading to issues in tracing, monitoring, and comprehending the flow of requests within a distributed system.
 
+For example, we have 2 vendors that provide the way to implement context propagation in different
 
+#### Vendor A:
+Context Propagation Headers:\
+A-Transaction-ID: a1b2c3d4-1234-5678-9abc-def012345678\
+A-User-Context: user123\
+A-Service-Identifier: serviceA
+
+#### Vendor B:
+Context Propagation Headers:\
+Request-ID: 9876\
+B-Client-Info: {"clientID": "client456", "location": "US"}\
+B-Session-ID: sessionB
+
+In the scenario of implementing 2 microservices, one from VendorA and the other from VendorB, attempting to establish context propagation between them becomes challenging.\
+This difficulty arises due to the notable differences in header field names and even data formats used by each service. Consequently, achieving seamless communication and context exchange between these microservices becomes impractical, highlighting the need for standardized practices to enhance interoperability.
 
 [W3C Trace Context](https://engineering.dynatrace.com/open-source/standards/w3c-trace-context/)\
 [What is OpenTelemetry? A Straightforward Guide](https://www.aspecto.io/blog/what-is-opentelemetry-the-infinitive-guide/)
