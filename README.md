@@ -1,4 +1,3 @@
-# spring-boot-otel-context-propagation
 ## Introduction
 In my previous [spring-boot-otel-jaeger](https://github.com/santipabWannakiri/spring-boot-otel-jaeger) POC project, I utilized Spring Boot with OpenTelemetry, incorporating the configuration of the Otel Collector and Jaeger dashboards. This project provides a comprehensive overview of the advantages of adopting OpenTelemetry, particularly in the realm of tracing. While it successfully establishes the foundation for understanding OpenTelemetry, there is still a crucial core concept that requires attention – `Context Propagation`. Consequently, my focus for this POC project will be on the seamless setup of the end-to-end project, followed by a demonstration of how context propagation operates and its impact on the overall results.
 
@@ -62,6 +61,10 @@ In the scenario of implementing 2 microservices, one from VendorA and the other 
 This difficulty arises due to the notable differences in header field names and even data formats used by each service. Consequently, achieving seamless communication and context exchange between these microservices becomes impractical, highlighting the need for standardized practices to enhance interoperability.
 
 ## W3C Trace Context and OpenTelemetry: Industry Standards for Enhanced Context Propagation
+<p align="center">
+  <img src="images/w3c-recomendation.png" alt="image description" width="800" height="300">
+</p>
+
 To address these challenges and promote interoperability, the industry has embraced standards such as W3C Trace Context and OpenTelemetry. OpenTelemetry, a widely adopted observability framework, adheres to the W3C Trace Context standard, providing a common framework for context propagation. Given this alignment, it is recommended to leverage OpenTelemetry when tracing microservices. By doing so, organizations can benefit from a standardized approach, ensuring consistency and compatibility in distributed tracing practices across diverse microservices and components.
 
 Refer :\
