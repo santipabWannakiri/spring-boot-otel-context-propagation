@@ -2,7 +2,7 @@
 ## Introduction
 In my previous [spring-boot-otel-jaeger](https://github.com/santipabWannakiri/spring-boot-otel-jaeger) POC project, I utilized Spring Boot with OpenTelemetry, incorporating the configuration of the Otel Collector and Jaeger dashboards. This project provides a comprehensive overview of the advantages of adopting OpenTelemetry, particularly in the realm of tracing. While it successfully establishes the foundation for understanding OpenTelemetry, there is still a crucial core concept that requires attention – `Context Propagation`. Consequently, my focus for this POC project will be on the seamless setup of the end-to-end project, followed by a demonstration of how context propagation operates and its impact on the overall results.
 
-## OpenTelemetry context propagation
+## Distributed tracing
 <p align="center">
   <img src="images/ex-cart-product-service.png" alt="image description" width="800" height="300">
 </p>
@@ -24,7 +24,10 @@ The presented illustration depicts a collaborative interaction between two servi
    - Cart service updates the cart based on the response.
    - Cart service notifies the user of success/failure.
 
+In the given scenario, envision a user-initiated transaction navigating through numerous services before yielding a result. Picture having 5 or 10 services involved; in the event of an error during the transaction, the investigation process could become highly challenging. This is where the pivotal concept of distributed tracing comes into play – it serves as the key to monitoring and visualizing request flows across diverse components within a distributed system.
 
+## OpenTelemetry context propagation
+Context propagation, a crucial aspect of distributed tracing, ensures seamless tracking of contextual information throughout the entire journey of a transaction, facilitating effective monitoring and troubleshooting.
 
 
 [W3C Trace Context](https://engineering.dynatrace.com/open-source/standards/w3c-trace-context/)\
