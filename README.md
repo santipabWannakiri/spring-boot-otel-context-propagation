@@ -32,6 +32,13 @@ Context propagation, a crucial aspect of distributed tracing, ensures seamless t
 
 So how does it work please take a look folw below.
 
+<p align="center">
+  <img src="images/basiac-context-propagation.png" alt="image description" width="800" height="300">
+</p>
+
+
+## Interoperability challenges
+In the absence of a universally accepted standard for context propagation, integrating systems from different vendors can pose challenges. This lack of standardization may result in difficulties ensuring seamless context propagation, potentially leading to issues in tracing, monitoring, and comprehending the flow of requests within a distributed system.
 
 
 
