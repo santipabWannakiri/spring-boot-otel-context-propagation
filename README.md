@@ -188,11 +188,16 @@ curl -X 'GET' \
  ```url
 http://localhost:16686/search
  ```
-* On Service menu select 'order-service'
+* On the service menu, select 'order-service'.
 * Click 'Find Traces'
-* You should see the trace name like 'order-service: POST /api/cart' then click it
-* You should see the trace name like 'order-service: POST /api/cart' 
+* You should see the trace name, like 'order-service: POST /api/cart' then click it.
+* You're going to see the graphic below to show the overall function that transactions pass through between Cart Service and Product Service.
+* Moreover, you will see the trace ID, and you can use the trace ID fill-in search bar as well to view this visualization.
+<p align="center">
+  <img src="images/ex-jaeger-traces.png" alt="image description" width="800" height="400">
+</p>
 
-  
+
+  Reference document :\
 [Distributed tracing](https://engineering.dynatrace.com/open-source/standards/w3c-trace-context/)\
 [What is OpenTelemetry? A Straightforward Guide](https://www.aspecto.io/blog/what-is-opentelemetry-the-infinitive-guide/)
