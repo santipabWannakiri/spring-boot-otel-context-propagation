@@ -111,35 +111,35 @@ To set up this POC project, we will follow the illustration above. The key compo
 
 ##  How to run project ?
 
-####  1. Build Cart&Product service
-* Clone project
-* Complie Cart service
-```mvn
+####  1. Build Cart & Product Services
+* Clone the project
+* Compile Cart service:
+```bash
 cd spring-boot-order-service
 mvn clean install
- ```
-* Complie Order service
- ```git
+  ```
+* Complie Order service:
+```bash
 cd spring-boot-product-service
 mvn clean install
- ```
-####  2. Build Cart&Product service as container
-* Build Cart service as a container
- ```docker
+```
+####  2. Build Cart & Product Services as Containers
+* Build Cart service as a container:
+ ```bash
 docker build -f ./OrderServiceDockerfile -t app/spring-boot-order-service .
  ```
-* Build Prodict service as a container
- ```docker
+* Build Product service as a container:
+ ```bash
 docker build -f ./ProductServiceDockerfile -t app/spring-boot-product-service . 
  ```
-####  3. Run docker compose
+####  3. Run Docker Compose
 * Start up all components
- ```docker
+ ```bash
 docker compose -f ./docker-compose.yaml up -d
  ```
 
-####  4. Checking components
-Before we test the service, we need to check that all the services are running by the following:
+####  4. Checking Components
+Before testing the service, ensure that all services are running:
 * Cart service Swagger
  ```url
 http://localhost:8080/swagger-ui/index.html
@@ -153,18 +153,17 @@ http://localhost:8081/swagger-ui/index.html
 http://localhost:16686/search
  ```
 
-#### 5. Testing Service
-To testing context propagation, I would like suggest you to get back and take a look on application flow. 
-We're going to follow step below for testing.
+#### 5. Testing the Service
+To test context propagation, follow these steps:
 
-* Call Product service for checking available product
+* Call Product service to check available products:
  ```curl
 curl -X 'GET' \
   'http://localhost:8081/api/products' \
   -H 'accept: */*'
  ```
 
-* Call Cart service for adding product to cart
+* Call Cart service to add a product to the cart:
  ```curl
 curl -X 'POST' \
   'http://localhost:8080/api/cart' \
@@ -177,22 +176,22 @@ curl -X 'POST' \
 }'
  ```
 
-* Call Cart service to check the product ID 1 to see if the quantity is deducted.
+* Call Cart service to check if the quantity for Product ID 1 is deducted:
  ```curl
 curl -X 'GET' \
   'http://localhost:8081/api/product/1' \
   -H 'accept: */*'
  ```
 
-* Navigate to Jaeger Dashboard
+* Navigate to Jaeger Dashboard:
  ```url
 http://localhost:16686/search
  ```
 * On the service menu, select 'order-service'.
-* Click 'Find Traces'
-* You should see the trace name, like 'order-service: POST /api/cart' then click it.
-* You're going to see the graphic below to show the overall function that transactions pass through between Cart Service and Product Service.
-* Moreover, you will see the trace ID, and you can use the trace ID fill-in search bar as well to view this visualization.
+* Click 'Find Traces'.
+* View the trace name, such as 'order-service: POST /api/cart', and click it.
+* Explore the graphic representation of the transactions between Cart Service and Product Service.
+* Note the trace ID, which can be used in the search bar for further visualization.
 <p align="center">
   <img src="images/ex-jaeger-traces.png" alt="image description" width="800" height="400">
 </p>
