@@ -72,7 +72,74 @@ Refer :\
 [OpenTelemetry Context Propagation](https://opentelemetry.io/docs/concepts/context-propagation/#propagation)
 
 
+## How does the Opentelemetry work ?
 
 
-[Distributed tracing](https://engineering.dynatrace.com/open-source/standards/w3c-trace-context/)
+##  Project Overview
+<p align="center">
+  <img src="images/otel-setup.png" alt="image description" width="700" height="500">
+</p>
+
+To set up this POC project, we will follow the illustration above. The key components include:
+
+### Application Layer:
+
+- Two services, Cart service, and Product service, both developed based on Spring Boot.
+
+### OTEL Backend:
+
+- Utilizing the OTEL collector to collect context propagation from the application layer.
+
+### Visualization:
+
+- Jaeger will be used to visualize context propagation stored within the Otel collector.
+
+### Key Details:
+
+- **Instrumentation Method:**
+  - [Automatic Instrumentation](https://opentelemetry.io/docs/instrumentation/java/automatic/) will be employed, leveraging OpenTelemetry's capabilities for effortless trace and metric collection.
+
+- **Containerization:**
+  - The entire project will be packaged into containers for seamless deployment and isolation.
+
+- **Docker-Compose:**
+  - Docker-compose will be used to initiate the project. Configuration details are specified within the docker-compose file.
+
+- **Endpoints:**
+  - Endpoint services will be accessible based on configurations in the docker-compose file. Ensure to document and share these endpoints for testing and interaction.
+
+
+##  How to run project ?
+
+####  1. Build Cart&Product service
+* Clone project
+* Complie Cart service
+```mvn
+cd spring-boot-order-service
+mvn clean install
+ ```
+* Complie Order service
+ ```git
+cd spring-boot-product-service
+mvn clean install
+ ```
+####  2. Build Cart&Product service as container
+* Build Cart service as a container
+ ```docker
+docker build -f ./OrderServiceDockerfile -t app/spring-boot-order-service .
+ ```
+* Build Prodict service as a container
+ ```docker
+docker build -f ./ProductServiceDockerfile -t app/spring-boot-product-service . 
+ ```
+####  3. Run docker compose
+* Start up all components
+ ```docker
+docker compose -f ./docker-compose.yaml up
+ ```
+
+
+
+
+[Distributed tracing](https://engineering.dynatrace.com/open-source/standards/w3c-trace-context/)\
 [What is OpenTelemetry? A Straightforward Guide](https://www.aspecto.io/blog/what-is-opentelemetry-the-infinitive-guide/)
