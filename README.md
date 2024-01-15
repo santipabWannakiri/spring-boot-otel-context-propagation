@@ -135,11 +135,23 @@ docker build -f ./ProductServiceDockerfile -t app/spring-boot-product-service .
 ####  3. Run docker compose
 * Start up all components
  ```docker
-docker compose -f ./docker-compose.yaml up
+docker compose -f ./docker-compose.yaml up -d
  ```
 
-
-
+##  Testing Service
+Before we test the service, we need to check that all the services are running by the following:
+* Cart service Swagger
+ ```url
+http://localhost:8080/swagger-ui/index.html
+ ```
+* Product service Swagger
+ ```url
+http://localhost:8081/swagger-ui/index.html
+ ```
+* Jaeger Dashboard
+ ```url
+http://localhost:16686/search
+ ```
 
 [Distributed tracing](https://engineering.dynatrace.com/open-source/standards/w3c-trace-context/)\
 [What is OpenTelemetry? A Straightforward Guide](https://www.aspecto.io/blog/what-is-opentelemetry-the-infinitive-guide/)
