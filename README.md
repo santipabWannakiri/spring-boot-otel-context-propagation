@@ -72,9 +72,6 @@ Refer :\
 [OpenTelemetry Context Propagation](https://opentelemetry.io/docs/concepts/context-propagation/#propagation)
 
 
-## How does the Opentelemetry work ?
-
-
 ##  Project Overview
 <p align="center">
   <img src="images/otel-setup.png" alt="image description" width="700" height="500">
