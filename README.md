@@ -138,7 +138,7 @@ docker build -f ./ProductServiceDockerfile -t app/spring-boot-product-service .
 docker compose -f ./docker-compose.yaml up -d
  ```
 
-##  Testing Service
+####  4. Checking components
 Before we test the service, we need to check that all the services are running by the following:
 * Cart service Swagger
  ```url
@@ -153,5 +153,46 @@ http://localhost:8081/swagger-ui/index.html
 http://localhost:16686/search
  ```
 
+#### 5. Testing Service
+To testing context propagation, I would like suggest you to get back and take a look on application flow. 
+We're going to follow step below for testing.
+
+* Call Product service for checking available product
+ ```curl
+curl -X 'GET' \
+  'http://localhost:8081/api/products' \
+  -H 'accept: */*'
+ ```
+
+* Call Cart service for adding product to cart
+ ```curl
+curl -X 'POST' \
+  'http://localhost:8080/api/cart' \
+  -H 'accept: */*' \
+  -H 'Content-Type: application/json' \
+  -d '{
+  "productId": 1,
+  "username": "santipab",
+  "quantity": 10
+}'
+ ```
+
+* Call Cart service to check the product ID 1 to see if the quantity is deducted.
+ ```curl
+curl -X 'GET' \
+  'http://localhost:8081/api/product/1' \
+  -H 'accept: */*'
+ ```
+
+* Navigate to Jaeger Dashboard
+ ```url
+http://localhost:16686/search
+ ```
+* On Service menu select 'order-service'
+* Click 'Find Traces'
+* You should see the trace name like 'order-service: POST /api/cart' then click it
+* You should see the trace name like 'order-service: POST /api/cart' 
+
+  
 [Distributed tracing](https://engineering.dynatrace.com/open-source/standards/w3c-trace-context/)\
 [What is OpenTelemetry? A Straightforward Guide](https://www.aspecto.io/blog/what-is-opentelemetry-the-infinitive-guide/)
