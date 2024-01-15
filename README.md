@@ -197,3 +197,4 @@ http://localhost:16686/search
   Reference document :\
 [Distributed tracing](https://engineering.dynatrace.com/open-source/standards/w3c-trace-context/)\
 [What is OpenTelemetry? A Straightforward Guide](https://www.aspecto.io/blog/what-is-opentelemetry-the-infinitive-guide/)
+[opentelemetry-bootcamp](https://www.aspecto.io/opentelemetry-bootcamp/)
